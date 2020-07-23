@@ -1,3 +1,3 @@
 import './js/common'
-import './less/main.less'
-import './css/main.css'
+import './assets/less/main.less'
+import './assets/css/main.css'

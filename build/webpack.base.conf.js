@@ -36,63 +36,77 @@ module.exports = {
     },
     module: {
         rules: [{
-            test: /\.js$/,
-            loader: 'babel-loader',
-            exclude: '/node_modules/'
-        }, {
-            test: /\.(png|jpg|gif|svg)$/,
-            loader: 'file-loader',
-            options: {
-                name: '[name].[ext]'
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: '/node_modules/'
+            }, {
+                test: /\.(png|jpg|gif|svg)$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]'
+                }
+            },
+            {
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]'
+                }
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    'style-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true,
+                            config: {
+                                path: './postcss.config.js'
+                            }
+                        }
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            sourceMap: true,
+                        }
+                    }
+                ]
+            }, {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }, {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true,
+                            config: {
+                                path: `./postcss.config.js`
+                            }
+                        }
+                    }
+                ]
             }
-        }, {
-            test: /\.less$/,
-            use: [
-                'style-loader',
-                MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader',
-                    options: {
-                        sourceMap: true
-                    }
-                },
-                {
-                    loader: 'postcss-loader',
-                    options: {
-                        sourceMap: true,
-                        config: {
-                            path: 'src/js/postcss.config.js'
-                        }
-                    }
-                },
-                {
-                    loader: 'less-loader',
-                    options: {
-                        sourceMap: true,
-                    }
-                }
-            ]
-        }, {
-            test: /\.css$/,
-            use: [
-                'style-loader',
-                MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader',
-                    options: {
-                        sourceMap: true
-                    }
-                }, {
-                    loader: 'postcss-loader',
-                    options: {
-                        sourceMap: true,
-                        config: {
-                            path: `${PATHS.src}/js/postcss.config.js`
-                        }
-                    }
-                }
-            ]
-        }]
+        ]
+    },
+    resolve: {
+        alias: {
+            '~': 'src', //short way to src for imports
+        }
     },
     plugins: [
         new MiniCssExtractPlugin({
@@ -106,8 +120,12 @@ module.exports = {
 
         new CopyWebpackPlugin({
             patterns: [{
-                    from: `${PATHS.src}/img`,
+                    from: `${PATHS.src}/${PATHS.assets}/img`,
                     to: `${PATHS.assets}img`
+                },
+                {
+                    from: `${PATHS.src}/${PATHS.assets}/fonts`,
+                    to: `${PATHS.assets}fonts`
                 },
                 {
                     from: `${PATHS.src}/static`,
